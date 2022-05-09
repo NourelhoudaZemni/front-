@@ -32,7 +32,6 @@ const INITIAL_STATE = {
     loadingDisable: false,
     loadingList: false,
     token: localStorage.getItem('token') || null,
-    userToken:localStorage.getItem('token') || null,
     users: null,
     successDelete: false,
     successDisable: false,

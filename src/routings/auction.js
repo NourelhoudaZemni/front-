@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Auction = require("../models/Auction");
 
+const User = require('../models/User');
 
 
 
@@ -34,18 +35,24 @@ const upload = multer({
     storage:storage,
     // fileFilter:fileFilter
 })
+///startAuction
 
+router.put("/startauction/:auctionId/:userId",auctionController.startAuction);
 
+router.get("/fetchMyAuctions/:id", auctionController.fetchMyAuctions);
 router.get("/", auctionController.fetchAuctions);
 router.get("/fetch-auction/:auctionId", auctionController.fetchAuction);
 router.post("/add-auction", upload.single("image"),auctionController.addAuction);
-router.post("/edit-auction", auctionController.editAuction);
-router.post("/delete-auction/:id", auctionController.deleteAuction);
-router.put("/addbid/:auctionId", auctionController.addbid);
+router.put("/update-auction/:auctionId",auctionController.editAuction);
+router.post("/delete-auction/:auctionId", auctionController.deleteAuction);
+router.put("/addbid/:auctionId/:id", auctionController.addbid);
 router.post("/upload", upload.single('image'), async (req, res) => {
     //console.log(req)
  
      const imgUrl = `http://localhost:5000/uploads/${req.file.filename}`
+     
+     
+     
     
      try {
         const {
@@ -54,7 +61,6 @@ router.post("/upload", upload.single('image'), async (req, res) => {
             Price,
             currentPrice,
             duration,
-            timer,
             catergory,
             auctionStarted, 
             auctionEnded, 
@@ -62,17 +68,18 @@ router.post("/upload", upload.single('image'), async (req, res) => {
             owner,
         
             purchasedBy,
-            currentBidder, 
-            room
+            currentBidder
+       
           } = req.body;
         
-     
+       
+
           const auction = new Auction({
             productName,
             description,
             Price,
             currentPrice,
-            duration,
+            duration: duration*360000,
             timer,
             soldAt: new Date().toISOString(),
             catergory,
@@ -83,14 +90,13 @@ router.post("/upload", upload.single('image'), async (req, res) => {
             purchasedBy,
             currentBidder,
       
-            bids: [],
-            room,
            image:imgUrl ,
           
          });
-     
-         await auction.save();
+         console.log("aaaaaaaaa")
 
+         await auction.save();
+console.log("zzzzzzzzzzz")
          return res.status(200).json({
       message: "Auction added", auction
          });

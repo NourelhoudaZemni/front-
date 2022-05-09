@@ -1,7 +1,20 @@
 import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
+import React, { useContext, useEffect, useState } from "react";
 
-function SpecialOffer({ products }) {
+import axios from "axios";
+function SpecialOffer({ product }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/products/3bestPromo")
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  
   return (
     <section className="offer-products-area pb-70">
       <div className="container">
@@ -17,27 +30,21 @@ function SpecialOffer({ products }) {
                   <div className="single-offer-products">
                     <div className="offer-products-image">
                       <Link to={`/products-details/${product._id}`}>
-                        <Image
-                          key={product._id}
-                          cloudName={process.env.REACT_APP_CLOUDINARY_NAME}
-                          publicId={product.image_public_id}
-                          width="300"
-                          crop="scale"
-                        />
+                      <img src={product.image} style={{width:"288px", height:"288px" }} />
                       </Link>
-                      <div className="tag">-20%</div>
+                      <div className="tag">{product.discount*100}</div>
                     </div>
 
                     <div className="offer-products-content">
-                      <span>Gadget</span>
+                      <span>{product.type}</span>
                       <h3>
                         <Link to={`/products-details/${product._id}`}>
                           {product.name}
                         </Link>
                       </h3>
                       <div className="price">
-                        <span className="new-price">${product.price}</span>
-                        <span className="old-price">$500.00</span>
+                        <span className="new-price">{product.price}DT</span>
+                        <span className="old-price">{product.oldPrice}DT</span>
                       </div>
                       <ul className="rating">
                         <li>

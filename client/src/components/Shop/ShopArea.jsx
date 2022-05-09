@@ -5,6 +5,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import {listProducts} from '../../redux/Product/ProductAction'
 import {addParams} from '../../redux/search/searchActions.js'
 import axios from "axios";
+import RecommendationCarousel from './RecommendationCarousel';
 
 function ShopArea({ products = [], addToCart, page, pages, keyword,showQuickView }) {
   
@@ -32,6 +33,8 @@ function ShopArea({ products = [], addToCart, page, pages, keyword,showQuickView
       <div className="container">
         <div className="products-filter-options">
           <div className="row align-items-center">
+          <RecommendationCarousel />
+
             <div className="col-lg-9 col-md-9">
               <p>Showing 1 – 18 of 100</p>
             </div>

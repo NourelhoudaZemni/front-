@@ -23,14 +23,14 @@ const CouponSchema = new mongoose.Schema({
         type: Number,
         //required: true,
         },
-        isUsed: {
-            type: String,
-            default: "no",
-    
-        }
+    isUsed: {
+        type: String,
+        default: "no",
+
+    }
         
 });
 
 
-const Coupon = mongoose.model("Coupon", CouponSchema);
+const Coupon = mongoose.model("coupon", CouponSchema);
 module.exports = Coupon;

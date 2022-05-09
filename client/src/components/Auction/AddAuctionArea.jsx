@@ -11,6 +11,9 @@ function AddAuctionArea() {
   const [duration, setDuration] = useState("");
   const [catergory, setCategory] = useState("");
   const [image, setImage] = useState("");
+  // const [currentBidder, setcurrentBidder] = useState("null");
+  // const [purchasedBy, setPurchasedBy] = useState(null);
+
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState();
   const [auctionStarted, setAuctionstarted] = useState(false);
@@ -27,6 +30,12 @@ function AddAuctionArea() {
     formData.append("currentPrice", currentPrice);
     formData.append("duration", duration);
     formData.append("catergory", catergory);
+    
+    console.log(JSON.parse(localStorage.getItem('user'))._id)
+
+    formData.append('owner', JSON.parse(localStorage.getItem('user'))._id)
+   
+
     setErrors(validate(formData));
     axios.post("http://127.0.0.1:5000/auction/upload",formData ,history.push('/auction')
     ,{ headers : {
@@ -43,6 +52,7 @@ function AddAuctionArea() {
                       setPrice("");
                       setDuration("");
                       setcurrentPrice("");
+                     
                       setAuctionstarted(true);
                       setErrors('');
                      

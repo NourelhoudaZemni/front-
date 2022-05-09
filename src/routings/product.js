@@ -31,10 +31,14 @@ const upload = multer({
 router.post('/discount/:id/',productController.addDiscount)
 router.post('/numViews/:id/',productController.editNumViews)
 
+router.get('/recommendation/:gender/:colour',productController.productRecommendation)
+
 router.get('/wishList/:userId',productController.getUserInfo)
 router.post('/wishList/:prodId/:userId',productController.addWishItem)
 router.put('/wishListDel/:prodId/:userId',productController.RemoveWishItem)
 router.get("/", productController.fetchProducts);
+router.get("/3bestPromo", productController.get3PromoProducts);
+router.get("/newArrivals", productController.getNewArrivals);
 router.get("/fetch-product/:productId", productController.fetchProduct);
 router.get("/fetch-productByUser/:id", productController.fetchProductByUser);
 router.post("/add-product", upload.single('image'), productController.addProduct);

@@ -1,9 +1,12 @@
 const Auction = require("../models/Auction");
+const User = require("../models/User");
 
+const io = require('../socket');
 
 const cloudinary = require("../utils/cloudinary");
 
-const multer = require('multer')
+const multer = require('multer');
+const { duration } = require("moment");
 
 const storage =multer.diskStorage({
     destination:function (req,file,cb) {
@@ -30,7 +33,45 @@ const upload = multer({
 
 exports.fetchAuctions = async (req, res) => {
   try {
-    const pageSize = 12
+
+
+  {
+    const pageSize = 8
+    const page = Number(req.query.pageNumber) || 1
+
+    const keyword = req.query.keyword
+      ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+      : {}
+    const count = await Auction.countDocuments({ ...keyword })
+    const auction = await Auction.find({ ...keyword })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+    
+    console.log("sssss");
+    
+
+    res.json({ auction, page, pages: Math.ceil(count / pageSize) })
+  
+    console.log(auction);
+  }
+  } catch (err) {
+    res.status(500);
+
+  }
+};
+
+///////////////
+exports.fetchMyAuctions = async (req, res) => {
+  try {
+
+    const id = req.params.id;
+  {
+    const pageSize = 8
     const page = Number(req.query.pageNumber) || 1
 
     const keyword = req.query.keyword
@@ -43,19 +84,21 @@ exports.fetchAuctions = async (req, res) => {
       : {}
 
     const count = await Auction.countDocuments({ ...keyword })
-    const auction = await Auction.find({ ...keyword })
+    const auction = await Auction.find({ ...keyword,owner:id })
       .limit(pageSize)
       .skip(pageSize * (page - 1))
-    console.log("sssss");
+    
+    console.log("mine");
     res.json({ auction, page, pages: Math.ceil(count / pageSize) })
     console.log(auction);
+  }
   } catch (err) {
     res.status(500);
 
   }
 };
 
-
+//////////////
 exports.addAuction =  upload.single('image'),async (req, res) => {
   try {
     console.log(req)
@@ -97,7 +140,7 @@ exports.addAuction =  upload.single('image'),async (req, res) => {
       auctionStarted,
       auctionEnded,
       sold,
-      owner,
+      owner: req.user.id,
       purchasedBy,
       currentBidder,
       image:imgUrl ,
@@ -131,13 +174,16 @@ exports.fetchAuction = async (req, res) => {
   }
 };
 
+
+
+/////////////////
+
 exports.deleteAuction = async (req, res) => {
   try {
 
-    const id = req.params.id;
-   // await Auction.deleteOne({ _id: id });
+  
 
-    const auction = await Auction.findOneAndDelete(req.params.id);
+   await Auction.findOneAndDelete(req.params.auctionId);
 
     return res.status(200).json({ message: "Successfully Deleted" });
   } catch (err) {
@@ -148,32 +194,9 @@ exports.deleteAuction = async (req, res) => {
 
 exports.editAuction = async (req, res) => {
 
-  try {    const id = req.params.auctionId;
-
-    const {
+ console.log(req.params.auctionId); 
+        await Auction.findOneAndUpdate(req.params.auctionId,
     
-    productName,
-    description,
-    Price,
-    currentPrice,
-    duration,
-    timer,
-    catergory,
-    auctionStarted, 
-    auctionEnded, 
-    sold,
-    owner,
-    purchasedBy,
-    currentBidder, 
-    room
-  } = req.body;
-
-
-  
-    const image_public_id = req.body.image_public_id;
-
-    await Auction.findByIdAndUpdate(id)(
-      { _id: auctionId },
       {
         $set: {
           productName,
@@ -182,58 +205,62 @@ exports.editAuction = async (req, res) => {
           currentPrice,
           duration,
           timer,
-          soldAt: new Date().toISOString(),
           catergory,
-          auctionStarted,
-          auctionEnded,
+          auctionStarted, 
+          auctionEnded, 
           sold,
           owner,
+      
           purchasedBy,
-          currentBidder,
-
-          image_public_id,
-          bids: [],
+          currentBidder, 
           room
+} = req.body
+
         },
-      }
+      
     );
     res.status(200).json({
       message: "Auction edited",
+    }).catch (err=> {
+      res.status(500);
     })
 
-  } catch (err) {
-    res.status(500);
   }
-}
+
 
 
 
 exports.addbid = async (req, res) => {
 
   try {
-    const {
-    
-    
-    currentPrice
-  } = req.body;
+    const { currentPrice,currentBidder
+} = req.body;
 
+const user = await User.findById(req.params.id);
+const name = user.name;
 auctionId=req.params.auctionId;
-  
+
+
 
      await Auction.updateOne(
       { _id: auctionId },
       {
         $set: {
-         
-          currentPrice
-        
+          currentBidder:req.params.id,
+          currentPrice,
+          currentBidder2:name
         },
       }
     );
     console.log(auctionId)
     const auction = await Auction.findById(auctionId)
     const price = auction.currentPrice
-    global.io.emit("newBid"+auctionId,{price})
+    const bidder= auction.currentBidder
+
+    const bidder2= auction.currentBidder2
+
+    console.log(bidder2)
+    global.io.emit("newBid"+auctionId,{price},{bidder},{bidder2})
     res.status(200).json({
       message: "bid added",
     })
@@ -241,4 +268,59 @@ auctionId=req.params.auctionId;
   } catch (err) {
     res.status(500);
   }
+
 }
+
+
+
+
+
+exports.startAuction = async (req, res, next) => {
+
+    try {
+      var { timer
+  } = req.body;
+  
+  id=req.params.id;
+  auctionId=req.params.auctionId;
+  
+  
+  
+     
+      console.log(auctionId)
+      const auction = await Auction.findById(auctionId)
+
+      auction.timer = parseInt(auction.duration);
+      auction.auctionEnded = false;
+    let intervalTimer = setInterval(async () => {
+     
+      
+  time= auction.timer
+  time =time-1000 
+      console.log(time)
+     
+    },1000)
+
+    console.log("b3atht timer")
+    await Auction.updateOne(
+      { _id: auctionId },
+      {
+        $set: {
+          timer:time,
+          
+        },
+      }
+    );
+
+    const timee= auction.timer
+    global.io.emit("countdown"+auctionId,{timee})
+    res.status(200).json()
+    setTimeout(async () => {
+      clearInterval(intervalTimer);
+    })
+   
+    } catch (err) {
+      res.status(500);
+    }
+  
+  }

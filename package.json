@@ -8,7 +8,8 @@
     "server": "nodemon src/server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "format": "prettier --write src/**/*"
+    "format": "prettier --write src/**/*",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefux client"
   },
   "keywords": [],
   "author": "",

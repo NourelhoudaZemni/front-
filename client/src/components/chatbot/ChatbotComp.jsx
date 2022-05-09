@@ -11,7 +11,10 @@ import "./App.css";
 function ChatbotComp() {
   return (
     <div className="ChatbotComp">
-      <div style={{ maxWidth: "300px" }}>
+      <div style={{ position: 'fixed',
+                    right:'25px',
+                    bottom: '50px',
+                    boxShadow: '0px 7px 29px 0px' }}>
         <Chatbot
           config={config}
           actionProvider={ActionProvider}

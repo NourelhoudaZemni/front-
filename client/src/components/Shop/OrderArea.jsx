@@ -23,7 +23,7 @@ const OrderArea = () => {
         <table className="order_list_table">
           <thead>
             <tr className="order_table100_head">
-              <th className="order_column1">Id</th>
+              <th className="order_column1">Reference</th>
               <th className="order_column2">User</th>
               <th className="order_column4">Total</th>
               <th className="order_column5">Paid</th>

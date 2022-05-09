@@ -26,16 +26,23 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [Price, setPrice] = useState("");
+  const [currentBidder, setcurrentBidder] = useState("");
+  const [currentBidder2, setcurrentBidder2] = useState("");
+  const [auctionStarted, setAuctionStarted] = useState("");
+
+  
   const [currentPrice, setcurrentPrice] = useState("");
   const [currentPrice2, setcurrentPrice2] = useState("");
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(300);
+  const [timer, setTimer] = useState(360000);
 
   const [category, setCategory] = useState("");
   const { auctionId } = useParams();
   const context = useContext(CartContext);
   const ENDPOINT = "http://localhost:5000/";
 
-
+  //formData.append('owner', JSON.parse(localStorage.getItem('user'))._id)
+  const id=JSON.parse(localStorage.getItem("user"))._id;
   useEffect(() => {
     console.log(Date.now())
     const socket = socketIOClient(ENDPOINT);
@@ -43,8 +50,20 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
     socket.on("newBid"+auctionId,(a)=>{
         console.log(a)
         setcurrentPrice(a["price"])
+        setcurrentBidder(a["bidder"])
+       setcurrentBidder2(a["bidder2"])
+        console.log(a["bidder"])
 
       })
+
+      socket.on("countdown"+auctionId,(a)=>{
+        console.log(a)
+        setTimer(a["time"])
+        
+        console.log(a["timee"])
+
+      })
+
 
     axios
       .get("/auction/fetch-auction/" + auctionId)
@@ -53,28 +72,42 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
         setAuction(res.data.auction);
         setDuration(res.data.auction.duration)
         setcurrentPrice(res.data.auction.currentPrice)
+setcurrentBidder(res.data.auction.currentBidder)
+setcurrentBidder2(res.data.auction.currentBidder2)
+         setTimer(res.data.auction.duration)
+console.log(res.data.auction.timer)
 
 
       })
       .catch((err) => console.log(err));
   }, []);
 
+  /////////////////
+
+  //
+  //
+  ////////////////
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer(timer => timer - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  
+
+
+
+
+
   const openDeleteModal = (auctionId) => {
     setAuction(auction);
   };
 
   
-  const openEditModal = (auction) => {
-    
-    setAuction(auction);
-    setProductName(auction.productName);
-    setDescription(auction.description);
-    setPrice(auction.Price);
-    setCategory(auction.catergory);
-    setDuration(auction.duration);
-    setcurrentPrice(auction.currentPrice);
-    
-  };
+
 
  
 
@@ -110,15 +143,17 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
   let history = useHistory();
 
   function updateCurrentPrice(){
+     
 
     let auction={currentPrice}
-    console.log(auctionId)
-    fetch ("/auction/addbid/"+ auctionId, {
+    console.log(id)
+    fetch ("/auction/addbid/"+ auctionId+"/"+id, {
           method: "PUT",
           headers: { "Accept":"application/json",
           "Content-Type": "application/json" },
           body: JSON.stringify({
-            currentPrice: currentPrice2
+            currentPrice: currentPrice2,
+          
           }
           ),
         } 
@@ -127,25 +162,43 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
                  // setTimer(duration)
                   console.log("aaaaaaaaaaaaaaa")
                     setcurrentPrice(currentPrice2)
-                    
-                //     const socket = io.connect("http://localhost:5000/");
-
-                // socket.emit("ss",{message:"aa"});
+                    setcurrentBidder(JSON.parse(localStorage.getItem("user")).name)
+        
                 
                   console.log(resp)
                 })
               
-         
-
+                
   }
+
+  function startAuction(){
+    console.log("aaaaaaaaaaaaaaa")
+
+  fetch ("/auction/startauction/"+ auctionId+"/"+id, {
+    method: "PUT",
+    headers: { "Accept":"application/json",
+    "Content-Type": "application/json" },
+    body: JSON.stringify({
+    
+    
+    }
+    ),
+  } 
+  ) .then((res) => res.json())
+          .then((resp) => {
+           // setTimer(duration)
+            console.log("aaaaaaaaaaaaaaa")
+              
+  
+          
+            console.log(resp)
+          })
+        
+          
+}
  
 
-
-
-
-
-  // We can use useEffect so that when the component
-  // mount the timer will start as soon as possible
+  
 
   // We put empty array to act as componentDid
   // mount only
@@ -155,6 +208,20 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
 
 
   
+  function secondsToHms(d) {
+    d = timer;
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    document.getElementById("timer").innerHTML = (hDisplay,mDisplay,sDisplay);
+  
+  }
+
+   
 
   return  (
     <section className="products-details-area ptb-50">
@@ -186,15 +253,18 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
                 </div>
                 <hr></hr>
                
-               <div className="countdown">
-               <span className="new-price" >Time Left: <Countdown date={ Date.now()+Date.parse(duration) *36000} renderer={renderer}/>
+               <div id="timer" className="countdown">
+               <span  className="new-price" >Time Left:{timer}
                </span>
                 </div>
                 <hr></hr>
                 <div className="price">
                  <span className="new-price" >Current Bid: {currentPrice}$</span>
                 </div>
-
+                <hr></hr>
+                <div className="price">
+                 <span className="new-price" >Current Bidder:   {currentBidder2}</span>
+                </div>
 
 
                 {/* <ul className="products-info">
@@ -243,7 +313,8 @@ function AuctionsDetailsArea({auctions,   editAuction }) {
        <div className="center">
       
         &nbsp;
-        <button  className="default-btn" onClick={()=>openDeleteModal(auction)}>Delete</button>
+        <button   onClick={startAuction}>Start Auction</button>
+
         </div>
         <div className="products-details-tabs">
           <ul className="nav nav-tabs" id="myTab" role="tablist">

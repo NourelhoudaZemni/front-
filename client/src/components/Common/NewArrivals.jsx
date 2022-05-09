@@ -1,14 +1,28 @@
-import React, { useState } from "react";
 import { Image } from "cloudinary-react";
 import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 
+import axios from "axios";
 function NewArrivals({
   paddingClass = "",
   title = "New Arrivals",
-  products = [],
+  productt = [],
   showQuickView,
   addToCart,
-}) {
+})
+ 
+{
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/products/newArrivals")
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <section className={"arrivals-products-area " + paddingClass}>
       <div className="container">
@@ -24,13 +38,7 @@ function NewArrivals({
                   <div className="single-arrivals-products">
                     <div className="arrivals-products-image">
                       <Link to={`/products-details/${product._id}`}>
-                        <Image
-                          key={product._id}
-                          cloudName={process.env.REACT_APP_CLOUDINARY_NAME}
-                          publicId={product.image_public_id}
-                          width="300"
-                          crop="scale"
-                        />
+                       <img src={product.image} style={{height:"300px"  }}/>
                       </Link>
                       <div className="tag">New</div>
                       <ul className="arrivals-action">
@@ -81,7 +89,7 @@ function NewArrivals({
                           <i className="bx bxs-star"></i>
                         </li>
                       </ul>
-                      <span>${product.price}</span>
+                      <span>{product.price}DT</span>
                     </div>
                   </div>
                 </div>

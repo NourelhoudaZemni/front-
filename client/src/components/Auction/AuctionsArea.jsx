@@ -33,6 +33,7 @@ _id:""
   const [catergory, setCategory] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
+  const [owner, setOwner] = useState();
 
 
 
@@ -49,12 +50,14 @@ _id:""
   //     .then((res) => setRole(res.data.role))
   //     .catch((err) => console.log(err));
   // }, []);
+  const id=JSON.parse(localStorage.getItem("user"))._id;
 
   
   useEffect(() => {
-    axios .get("/auction")
+    axios .get("/auction/")
       .then((res) => {
         setAuction(res.data.auction);
+        console.log("aaaaaaaaa")
       })
       .catch((err) => console.log(err));
   }, []);
@@ -76,19 +79,12 @@ _id:""
     setCategory(auction.catergory);
     setDuration(auction.duration);
     setcurrentPrice(auction.currentPrice);
-    
+    setOwner(auction.owner);
+
   };
 
 
-  useEffect(() => {
-    setInterval(() => {
-      
-    }, 1000);
-  }, []);
-
-
-  let expiredDate = duration
-
+  
 // function getAuction(){
 // fetch("/auction/").then((res)=>{
 //   res.json().then((resp)=>{
@@ -100,16 +96,20 @@ _id:""
 // })
 // }
 
-function deleteAuction(id){
-  fetch(`/auction/delete-auction/`+id,{
+function deleteAuction(auctionId){
+  fetch(`/auction/delete-auction/`+auctionId,{
     method:'POST'
   }).then((res)=>{
     res.text().then((resp)=>{
       console.log(resp);
-//window.location.reload()
+window.location.reload()
   })
   })
 }
+
+// function updateAuction(id){
+//   history.push(`/update-auction/`+id);
+// }
   // const Delete = async (id) => {
   //   try{
   //  await axios.delete("http://localhost:5000/auction/delete-auction/:id",{ params: {
@@ -204,9 +204,6 @@ function deleteAuction(id){
                  Duration <span>{auction.duration}</span>
                   </diV>   
           
-                  <button   onClick={() => deleteAuction(auction._id)}>
-                       Delete
-                      </button>
                 </div>
               </div>
 

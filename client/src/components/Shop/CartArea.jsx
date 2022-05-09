@@ -71,7 +71,11 @@ const applyCoupon = (e)=>{
 
 
 
+const username = JSON.parse(localStorage.getItem('user')).username
   useEffect(()=>{
+
+    
+
     const makeRequest = async ()=>{
       try{
         const res = await axios.post("http://localhost:5000/stripe/payment", {
@@ -299,7 +303,7 @@ const applyCoupon = (e)=>{
               </ul>
 
             <StripeCheckout 
-            name="username"
+            name={username}
             billingAddress
             shippingAddress
             description={`Your total is $ ${((context.cartItems &&

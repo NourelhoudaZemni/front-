@@ -49,7 +49,7 @@ function MiddleHeader({ history,location }) {
           <div className="col-lg-3">
             <div className="middle-header-logo">
               <Link to="/">
-                <img src={logo} alt="image" />
+                <img style={{width:"200px"}} src={logo} alt="image" />
               </Link>
             </div>
           </div>

@@ -1,20 +1,12 @@
-class ActionProvider {
-    constructor(
-     createChatBotMessage,
-     setStateFunc,
-     createClientMessage,
-     stateRef,
-     createCustomMessage,
-     ...rest
-   ) {
-     this.createChatBotMessage = createChatBotMessage;
-     this.setState = setStateFunc;
-     this.createClientMessage = createClientMessage;
-     this.stateRef = stateRef;
-     this.createCustomMessage = createCustomMessage;
-   }
 
-   greet = () => {
+ class ActionProvider {
+  constructor(createChatBotMessage, setStateFunc) {
+    this.createChatBotMessage = createChatBotMessage;
+    this.setState = setStateFunc;
+  }
+
+  greet = (e) => {
+    console.log(e)
     const message = this.createChatBotMessage("Hello, How can I help you?.");
     this.addMessageToState(message);
   };
@@ -24,14 +16,21 @@ class ActionProvider {
     this.addMessageToState(message);
   };
 
+  handleJavascriptQuiz = (e) => {
+    console.log(e)
+    const message = this.createChatBotMessage(
+      e
+    );
+
+    this.addMessageToState(message);
+  };
+
   addMessageToState = (message) => {
     this.setState((prevState) => ({
       ...prevState,
       messages: [...prevState.messages, message],
     }));
   };
+}
 
- }
-
- 
- export default ActionProvider;
+export default ActionProvider;

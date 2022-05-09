@@ -378,7 +378,16 @@ function Navbar() {
                     Create an auction
                   </NavLink>
                 </li>}
-                  
+                <li className="nav-item">
+                      <NavLink to="/auction" className="nav-link">
+                        All auctions
+                      </NavLink>
+                    </li>
+
+                    {token && <li className="nav-item">
+                      <NavLink to="/MyAuctions" className="nav-link">
+My auctions                      </NavLink>
+                    </li>}
 
 </ul></li> 
                 <li className="nav-item">
@@ -619,7 +628,7 @@ function Navbar() {
                 <div className="option-item  respo-nav">
                   <span>
                     Hotline:
-                    <a href="tel:16545676789">(+1) 654 567 – 6789</a>
+                    <a href="tel:16545676789">(+216) 54 879 658</a>
                   </span>
                 </div>
               </div>
@@ -631,7 +640,7 @@ function Navbar() {
       <div className="others-option-for-responsive">
         <div className="container">
           <div className="responsive-logo">
-            <span>Econix</span>
+            <span>La7winta</span>
           </div>
           <div className="dot-menu" onClick={() => toggleHotline()}>
             <div className="inner">

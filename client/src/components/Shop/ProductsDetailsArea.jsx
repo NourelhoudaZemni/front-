@@ -5,6 +5,12 @@ import { Image } from "cloudinary-react";
 import CartContext from "../../contexts/cart-context";
 import dateFormat from 'dateformat';
 import Rate from "./Rate";
+import Chatbot from "react-chatbot-kit";
+import 'react-chatbot-kit/build/main.css';
+
+import config from "../chatbot/config";
+import ActionProvider from "../chatbot/ActionProvider";
+import MessageParser from "../chatbot/MessagePerser";
 function ProductsDetailsArea() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
@@ -254,7 +260,18 @@ function ProductsDetailsArea() {
                 </div>
               </div>
             </div>
-
+            <div className="ChatbotComp">
+      <div style={{ position: 'fixed',
+                    right:'25px',
+                    bottom: '50px',
+                    boxShadow: '0px 7px 29px 0px' }}>
+        <Chatbot
+          config={config}
+          actionProvider={ActionProvider}
+          messageParser={MessageParser}
+        />
+      </div>
+    </div>
             <div className="col-lg-6 col-md-6">
               <div className="product-content content-two">
                 <h3>{product.name}</h3>

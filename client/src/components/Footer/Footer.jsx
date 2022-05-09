@@ -12,16 +12,16 @@ function Footer() {
                   <li>
                     <span>Address:</span>
                     <a href="#" target="_blank">
-                      4848 Hershell Hollow Road Bothell, WA 89076
+                      Ariana Soghra , Raoued
                     </a>
                   </li>
                   <li>
                     <span>Phone:</span>
-                    <a href="tel:+15143214567">+1 (514) 321-4567</a>
+                    <a href="tel:+15143214567">+216 54 879 658</a>
                   </li>
                   <li>
                     <span>Email:</span>
-                    <a href="mailto:hello@econix.com">hello@econix.com</a>
+                    <a href="mailto:hello@econix.com">L7winta@gmail.com</a>
                   </li>
                 </ul>
                 
@@ -56,7 +56,7 @@ function Footer() {
 
                 <ul className="quick-links">
                   <li>
-                    <a href="/pricing-plans">Shipping And Delivery</a>
+                    <a href="/pricing-plans">Shopping used items</a>
                   </li>
                   <li>
                     <a href="/checkout">Payment Method</a>
@@ -104,36 +104,7 @@ function Footer() {
               </div>
             </div>
 
-            <div className="col-lg-3 col-sm-6">
-              <div className="single-footer-widget">
-                <h2>Join Our Newsletter</h2>
-
-                <div className="newsletter-item">
-                  <div className="newsletter-content">
-                    <p>
-                      Subscribe to the newsletter for all the latest updates
-                    </p>
-                  </div>
-
-                  <form className="newsletter-form" data-toggle="validator">
-                    <input
-                      type="email"
-                      className="input-newsletter"
-                      placeholder="Email address"
-                      name="EMAIL"
-                      required
-                      autoComplete="off"
-                    />
-
-                    <button type="submit">Subscribe</button>
-                    <div
-                      id="validator-newsletter"
-                      className="form-result"
-                    ></div>
-                  </form>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </section>
@@ -141,7 +112,7 @@ function Footer() {
         <div className="container">
           <div className="copyright-area-content">
             <p>
-              Copyright @2021 Econix. All Rights Reserved by
+              Copyright @2021 L7winta. All Rights Reserved by
               <a href="https://hibootstrap.com/" target="_blank" rel="noreferrer">
               HiBootstrap
               </a>

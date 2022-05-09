@@ -55,38 +55,27 @@ const auctionSchema = new Schema({
         default: false,
       },
       owner: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
+        type:  mongoose.Schema.Types.ObjectId,
+        ref: 'user',
       },
+      
       purchasedBy: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
+        type:  mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        default:null
       },
       currentBidder: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
+        type:  mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        default:null
+
       },
-      bids: [
-        {
-          user: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User',
-            required: true,
-          },
-          amount: {
-            type: mongoose.Types.Decimal128,
-            required: true,
-          },
-          time: {
-            type: Date,
-            default: Date.now,
-          },
-        },
-      ],
-      room: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Room',
+      currentBidder2: {
+        type: String,
+        
+
       },
+     
     },
     { timestamps: true }
   );

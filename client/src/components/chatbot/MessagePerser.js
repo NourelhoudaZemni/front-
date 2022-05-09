@@ -9,7 +9,7 @@ class MessageParser {
         const lowercase = message.toLowerCase();
     
         if (lowercase.includes("hello")) {
-          this.actionProvider.greet();
+          this.actionProvider.greet("ggg");
         } 
         else  if (lowercase.includes("where can i find the cherity events !")) {
             this.actionProvider.greet1();

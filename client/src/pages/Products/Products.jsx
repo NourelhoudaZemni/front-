@@ -12,7 +12,8 @@ function Products() {
 
   useEffect(() => {
     axios
-      .get("/products/fetch-productByUser/"+idUser)
+      .get("http://localhost:5000/products/")
+      // .get("http://localhost:5000/products/fetch-productByUser/"+idUser)
       .then((res) => {
         setProducts(res.data.products);
       })
