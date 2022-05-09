@@ -12,6 +12,7 @@ const commentRoutes = require("./routings/comment");
 const auctionRoutes = require("./routings/auction");
 const chatbotRoutes = require("./routings/chatbot");
 
+const path = require('path');
 //////////Coupon
 const orderRoutes = require("./routings/order");
 const couponRoutes = require("./routings/coupon");
