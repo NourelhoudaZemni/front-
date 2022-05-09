@@ -1,5 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom"; 
+import ReactDOM from "react-dom";
+import "./assets/css/bootstrap.min.css";
 import "./assets/css/flaticon.min.css";
 import "./assets/css/boxicon.min.css";
 import "./index.css";

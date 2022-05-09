@@ -3,9 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.js
-/src/assets
-/src/Footer
+.pnp.js  
 
 # testing
 /coverage
