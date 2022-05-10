@@ -130,7 +130,8 @@ window.location.reload()
               <div className="single-shop-products">
                 <div className="shop-products-image">
                   <Link to={`/auctions-room/${auction._id}`}>
-                  <img src={auction.image} alt={auction.name} width="300"  />
+                  <img src={auction.image} alt={auction.name}         style= {{marginBottom: "5px",marginLeft: "1px", width:"50rem", height:'16rem'}}
+  />
 
                   </Link>
                   <div className="tag">New</div>
