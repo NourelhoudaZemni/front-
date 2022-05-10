@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const { cloudinary } = require("../utils/cloudinary");
 
 const checkAuth = require("../middlewares/check-auth");
 const productController = require("../controllers/product");
@@ -48,7 +49,8 @@ router.post("/upload", upload.single('image'), async (req, res) => {
    //console.log(req)
 
     const imgUrl = `http://localhost:5000/uploads/${req.file.filename}`
-   
+    const result = await cloudinary.uploader.upload(req.file.path);
+   console.log(result)
     try {
       const user = req.body.user;
       const name = req.body.product_name;
@@ -60,8 +62,6 @@ router.post("/upload", upload.single('image'), async (req, res) => {
         const gender = req.body.product_gender;
         const brandId = req.body.brandId;
         const total_in_stock = req.body.total_in_stock;
-       
-    
         const product = new Product({
           user,
           name,
