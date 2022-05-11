@@ -46,65 +46,63 @@ router.post("/add-auction", upload.single("image"),auctionController.addAuction)
 router.put("/update-auction/:auctionId",auctionController.editAuction);
 router.post("/delete-auction/:auctionId", auctionController.deleteAuction);
 router.put("/addbid/:auctionId/:id", auctionController.addbid);
-router.post("/upload", upload.single('image'), async (req, res) => {
-    //console.log(req)
- 
-     const imgUrl = `http://localhost:5000/uploads/${req.file.filename}`
-     
-     
-     
-    
-     try {
-        const {
-            productName,
-            description,
-            Price,
-            currentPrice,
-            duration,
-            catergory,
-            auctionStarted, 
-            auctionEnded, 
-            sold,
-            owner,
-        
-            purchasedBy,
-            currentBidder
-       
-          } = req.body;
-        
-       
+router.post("/add", upload.single('image'), async (req, res) => {
+  //console.log(req)
 
-          const auction = new Auction({
-            productName,
-            description,
-            Price,
-            currentPrice,
-            duration: duration*360000,
-            timer,
-            soldAt: new Date().toISOString(),
-            catergory,
-            auctionStarted,
-            auctionEnded,
-            sold,
-            owner,
-            purchasedBy,
-            currentBidder,
+   const imgUrl = `http://localhost:5000/uploads/${req.file.filename}`
+  
+   try {
+      const {
+          productName,
+          description,
+          Price,
+          currentPrice,
+          duration,
+          timer,
+          catergory,
+          auctionStarted, 
+          auctionEnded, 
+          sold,
+          owner,
       
-           image:imgUrl ,
-          
-         });
-         console.log("aaaaaaaaa")
+          purchasedBy,
+          currentBidder, 
+          room
+        } = req.body;
+      
+   
+        const auction = new Auction({
+          productName,
+          description,
+          Price,
+          currentPrice,
+          duration:duration*360000,
+          timer,
+          soldAt: new Date().toISOString(),
+          catergory,
+          auctionStarted,
+          auctionEnded,
+          sold,
+          owner,
+          purchasedBy,
+          currentBidder,
+    
+          bids: [],
+          room,
+         image:imgUrl ,
+        
+       });
+   
+       await auction.save();
+   
+       return res.status(200).json({
+    message: "Auction added", auction
+       });
+     } catch (err) {
+       res.status(500);
+     }
 
-         await auction.save();
-console.log("zzzzzzzzzzz")
-         return res.status(200).json({
-      message: "Auction added", auction
-         });
-       } catch (err) {
-         res.status(500);
-       }
- 
- 
- });
+
+});
  
 module.exports = router;
