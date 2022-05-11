@@ -8,12 +8,14 @@
   },
   "scripts": {
     "start": "node src/server",
-    "server": "node src/server",
-    "client": "npm start --prefix client", 
-    "format": "prettier --write src/**/*", 
-    "build": "cd client && npm run build",
+    "server": "node src/server", 
+    "format": "prettier --write src/**/*",  
     "install-client": "cd client && npm install",
-     
+    
+     "client": "cd client && npm run start",
+     "install": "cd client && npm install",
+     "build": "cd client && npm run build",
+    
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
