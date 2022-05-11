@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node src/server",
     "server": "node src/server",
-    "client": "cd client && npm start --prefix client", 
+    "client": "npm start --prefix client", 
     "format": "prettier --write src/**/*", 
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
