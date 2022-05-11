@@ -90,6 +90,16 @@ _id:""
 
   };
 
+  function converTimer(d) {
+    var h = Math.floor(d / 360000);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+  
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+  }
+  
 
   useEffect(() => {
     setInterval(() => {
@@ -164,7 +174,7 @@ window.location.reload()
                 Start Price: <span>{auction.Price}</span>
  
                   <diV>
-                 Duration <span>{auction.duration}</span>
+                 Duration <span>{converTimer(auction.duration)}</span>
                   </diV>   
           <br></br>
                   <button   className="default-btn" onClick={() => deleteAuction(auction._id)}>

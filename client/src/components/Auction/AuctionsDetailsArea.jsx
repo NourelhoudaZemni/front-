@@ -207,19 +207,17 @@ console.log(res.data.auction.timer)
   }, []);
 
 
-  
-  function secondsToHms(d) {
-    d = timer;
-    var h = Math.floor(d / 3600);
+  function converTimer(d) {
+    var h = Math.floor(d / 360000);
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
     var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    document.getElementById("timer").innerHTML = (hDisplay,mDisplay,sDisplay);
-  
+return hDisplay+mDisplay+sDisplay;  
   }
+
 
    
 
@@ -254,7 +252,7 @@ console.log(res.data.auction.timer)
                 <hr></hr>
                
                <div id="timer" className="countdown">
-               <span  className="new-price" >Time Left:{timer}
+               <span  className="new-price" >Time Left:{converTimer(timer)}
                </span>
                 </div>
                 <hr></hr>

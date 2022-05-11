@@ -106,6 +106,16 @@ window.location.reload()
   })
   })
 }
+function converTimer(d) {
+  var h = Math.floor(d / 360000);
+  var m = Math.floor(d % 3600 / 60);
+  var s = Math.floor(d % 3600 % 60);
+
+  var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours") : "";
+  var mDisplay = m > 0 ? m + (m == 1 ? " minute" : " minutes") : "";
+  var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+return hDisplay+mDisplay+sDisplay;  
+}
 
 // function updateAuction(id){
 //   history.push(`/update-auction/`+id);
@@ -148,6 +158,7 @@ window.location.reload()
 
   //   setProductImages(data.public_id);
   // };
+ 
 
   return (
     <section className="shop-area bg-ffffff pt-50 pb-50">
@@ -202,7 +213,7 @@ window.location.reload()
                 Start Price: <span>{auction.Price}</span>
  
                   <diV>
-                 Duration <span>{auction.duration}</span>
+                 Duration <span>{converTimer(auction.duration)}</span>
                   </diV>   
           
                 </div>
